@@ -14,7 +14,10 @@ object WordCount {
     val wordRdd = lines.flatMap(line => line.split(" "))
     val wordPairRdd = wordRdd.map(word => (word, 1))
 
-    val wordCounts = wordPairRdd.reduceByKey((x, y) => x + y)
-    for ((word, count) <- wordCounts.collect()) println(word + " : " + count)
+    val rdd1 = wordPairRdd.reduceByKey((x, y) => x + y)
+    val rdd2 = rdd1.sortBy(_._2, false)
+    for ((word, count) <- rdd2.collect().take(10)) {
+      println(word + " : " + count)
+    }
   }
 }
